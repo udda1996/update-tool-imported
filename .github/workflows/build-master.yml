@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - add-integrity-check-test
 
 jobs:
   build:
@@ -21,6 +22,7 @@ jobs:
     - name: Build with Gradle
       env:
           GITHUB_TOKEN: ${{ secrets.PUBLISH_PAT }}
+          BALLERINA_DEV_UPDATE: true
       run: |
         ./gradlew build jacocoTestReport
     - name: Generate Codecov Report
