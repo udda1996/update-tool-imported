@@ -16,6 +16,7 @@ jobs:
         run: chmod +x gradlew
       - name: Build with Gradle
         run: |
+          mkdir -p ubuntu
           ./gradlew build jacocoTestReport > ubuntu/build-logs.txt 2>&1
         env:
           TEST_MODE_ACTIVE: true
@@ -37,6 +38,7 @@ jobs:
         run: chmod +x gradlew
       - name: Build with Gradle
         run: |
+          mkdir -p macos
           ./gradlew clean build > macos/build-logs.txt 2>&1
         env:
           TEST_MODE_ACTIVE: true
@@ -58,6 +60,7 @@ jobs:
         run: chmod +x gradlew
       - name: Build with Gradle
         run: |
+          mkdir -p windows
           ./gradlew clean build > windows/build-logs.txt 2>&1
         env:
           TEST_MODE_ACTIVE: true
