@@ -1,7 +1,6 @@
-name: Archive Build Logs
+name: Build pull request
 
-on:
-  workflow_dispatch: # This triggers the workflow manually
+on: pull_request
 
 jobs:
   ubuntu-build:
@@ -12,20 +11,18 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+      - name: Create Ubuntu Directory
+        run: mkdir -p ubuntu
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Build with Gradle
+      - name: Build with Gradle and Save Logs for Ubuntu
         run: |
-          mkdir -p ubuntu
           ./gradlew build jacocoTestReport > ubuntu/build-logs.txt 2>&1
         env:
           TEST_MODE_ACTIVE: true
-      - name: Archive build logs for Ubuntu
-        uses: actions/upload-artifact@v2
-        with:
-          name: ubuntu-build-logs
-          path: ubuntu/build-logs.txt # Archive the text file containing build logs
-  
+      - name: Generate Codecov Report
+        uses: codecov/codecov-action@v1
+
   macos-build:
     runs-on: macos-latest
     steps:
@@ -34,20 +31,16 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+      - name: Create MacOS Directory
+        run: mkdir -p macos
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Build with Gradle
+      - name: Build with Gradle and Save Logs for MacOS
         run: |
-          mkdir -p macos
           ./gradlew clean build > macos/build-logs.txt 2>&1
         env:
           TEST_MODE_ACTIVE: true
-      - name: Archive build logs for macOS
-        uses: actions/upload-artifact@v2
-        with:
-          name: macos-build-logs
-          path: macos/build-logs.txt # Archive the text file containing build logs
-  
+
   windows-build:
     runs-on: windows-latest
     steps:
@@ -56,16 +49,12 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+      - name: Create Windows Directory
+        run: mkdir -p windows
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Build with Gradle
+      - name: Build with Gradle and Save Logs for Windows
         run: |
-          mkdir -p windows
           ./gradlew clean build > windows/build-logs.txt 2>&1
         env:
           TEST_MODE_ACTIVE: true
-      - name: Archive build logs for Windows
-        uses: actions/upload-artifact@v2
-        with:
-          name: windows-build-logs
-          path: windows/build-logs.txt # Archive the text file containing build logs
